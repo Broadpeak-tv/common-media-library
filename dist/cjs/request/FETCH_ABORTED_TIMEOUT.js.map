@@ -1,0 +1,1 @@
+{"version":3,"file":"FETCH_ABORTED_TIMEOUT.js","sourceRoot":"","sources":["../../../src/request/FETCH_ABORTED_TIMEOUT.ts"],"names":[],"mappings":";;;AAAA;;;;;;GAMG;AACU,QAAA,qBAAqB,GAAG,SAAS,CAAC","sourcesContent":["/**\n * Fetch timeout aborted reason.\n *\n * @group Request\n *\n * @beta\n */\nexport const FETCH_ABORTED_TIMEOUT = 'timeout';\n"]}

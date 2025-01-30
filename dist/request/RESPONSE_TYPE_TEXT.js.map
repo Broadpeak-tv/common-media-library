@@ -1,0 +1,1 @@
+{"version":3,"file":"RESPONSE_TYPE_TEXT.js","sourceRoot":"","sources":["../../src/request/RESPONSE_TYPE_TEXT.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,MAAM,CAAC,MAAM,kBAAkB,GAAG,MAAM,CAAC","sourcesContent":["/**\n * Text response type.\n *\n * @group Request\n *\n * @beta\n */\nexport const RESPONSE_TYPE_TEXT = 'text';\n"]}

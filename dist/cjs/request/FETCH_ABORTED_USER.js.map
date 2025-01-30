@@ -1,0 +1,1 @@
+{"version":3,"file":"FETCH_ABORTED_USER.js","sourceRoot":"","sources":["../../../src/request/FETCH_ABORTED_USER.ts"],"names":[],"mappings":";;;AAAA;;;;;;GAMG;AACU,QAAA,kBAAkB,GAAG,MAAM,CAAC","sourcesContent":["/**\n * Fetch user aborted reason.\n *\n * @group Request\n *\n * @beta\n */\nexport const FETCH_ABORTED_USER = 'user';\n"]}

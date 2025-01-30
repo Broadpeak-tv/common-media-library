@@ -1,0 +1,1 @@
+{"version":3,"file":"RESPONSE_TYPE_ARRAYBUFFER.js","sourceRoot":"","sources":["../../../src/request/RESPONSE_TYPE_ARRAYBUFFER.ts"],"names":[],"mappings":";;;AAAA;;;;;;GAMG;AACU,QAAA,yBAAyB,GAAG,aAAa,CAAC","sourcesContent":["/**\n * Array buffer response type.\n *\n * @group Request\n *\n * @beta\n */\nexport const RESPONSE_TYPE_ARRAYBUFFER = 'arraybuffer';\n"]}

@@ -1,0 +1,1 @@
+{"version":3,"file":"RESPONSE_TYPE_JSON.js","sourceRoot":"","sources":["../../../src/request/RESPONSE_TYPE_JSON.ts"],"names":[],"mappings":";;;AAAA;;;;;;GAMG;AACU,QAAA,kBAAkB,GAAG,MAAM,CAAC","sourcesContent":["/**\n * JSON response type.\n *\n * @group Request\n *\n * @beta\n */\nexport const RESPONSE_TYPE_JSON = 'json';\n"]}

@@ -1,5 +1,5 @@
 {
-	"name": "@svta/common-media-library-workspace",
+	"name": "@svta/common-media-library",
 	"version": "0.7.4",
 	"license": "Apache-2.0",
 	"homepage": "https://github.com/streaming-video-technology-alliance/common-media-library",
@@ -10,6 +10,43 @@
 	},
 	"bugs": {
 		"url": "https://github.com/streaming-video-technology-alliance/common-media-library/issues"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org",
+		"provenance": true,
+		"scope": "svta"
+	},
+	"files": [
+		"dist/**/*",
+		"NOTICE"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/cjs/index.js",
+			"default": "./dist/index.js"
+		},
+		"./*.js": {
+			"import": "./dist/*.js",
+			"require": "./dist/cjs/*.js",
+			"default": "./dist/*.js"
+		},
+		"./*": {
+			"types": "./dist/*.d.ts",
+			"import": "./dist/*.js",
+			"require": "./dist/cjs/*.js",
+			"default": "./dist/*.js"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"*": [
+				"dist/*",
+				"dist/cjs/*"
+			]
+		}
 	},
 	"keywords": [
 		"CTA-5004",
@@ -22,43 +59,17 @@
 		"Structured Field Values",
 		"ID3",
 		"Common Media Request",
-		"Common Media Response"
+		"Common Media Response",
+		"CTA-608",
+		"CEA-608",
+		"EIA-608"
 	],
 	"scripts": {
-		"format": "npm run lint -- --fix",
-		"lint": "eslint .",
-		"build": "npm run build -ws --if-present",
-		"pretest": "npm run build && npm run lint",
-		"test": "npm test -ws --if-present",
-		"start": "npm start -w dev",
-		"pub": "npm publish -w lib --provenance --access public",
-		"ver": "tsx scripts/version.mts",
-		"docs": "npm start -w docs",
-		"notes": "tsx scripts/createReleaseNotes.mts",
-		"typecheck": "tsc --noEmit"
-	},
-	"workspaces": [
-		"lib",
-		"docs",
-		"dev",
-		"samples/*"
-	],
-	"devDependencies": {
-		"@eslint/eslintrc": "3.1.0",
-		"@eslint/js": "9.13.0",
-		"@microsoft/api-extractor": "7.47.11",
-		"@types/node": "22.8.0",
-		"@typescript-eslint/eslint-plugin": "8.11.0",
-		"@typescript-eslint/parser": "8.11.0",
-		"eslint": "9.13.0",
-		"eslint-plugin-tsdoc": "0.3.0",
-		"eslint-plugin-typescript-enum": "2.1.0",
-		"glob": "11.0.0",
-		"globals": "15.11.0",
-		"hi-base32": "0.5.1",
-		"tslib": "2.8.0",
-		"tsx": "4.19.1",
-		"typedoc": "0.26.10",
-		"typescript": "5.6.3"
+		"build": "npm run build:esm && npm run build:cjs",
+		"postbuild": "api-extractor run --local",
+		"build:esm": "tsx ../scripts/build.mts",
+		"build:cjs": "tsc --module commonjs --outDir dist/cjs",
+		"test": "tsx --test ./test/**/*.test.ts",
+		"prepublishOnly": "npm run build"
 	}
 }
