@@ -1,5 +1,6 @@
 import type { CommonMediaRequest } from './CommonMediaRequest.js';
 import type { ResourceTiming } from './ResourceTiming.js';
+import type { FetchAbortedReason } from './FetchAbortedReason.js';
 
 /**
  * Common response API.
@@ -26,6 +27,16 @@ export type CommonMediaResponse = {
 	redirected?: boolean
 
 	/**
+	 * Indicates whether or not the request has been aborted.
+	 */
+	aborted?: boolean
+
+	/**
+	 * The reasonfor which the request has been aborted.
+	 */
+	abortReason?: FetchAbortedReason
+
+	/**
 	 * The HTTP status code of the response.
 	 */
 	status?: number
@@ -34,11 +45,6 @@ export type CommonMediaResponse = {
 	 * The status message corresponding to the HTTP status code.
 	 */
 	statusText?: string
-
-	/**
-	 * The type of the response.
-	 */
-	type?: string
 
 	/**
 	 * The response headers.

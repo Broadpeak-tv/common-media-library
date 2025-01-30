@@ -1,4 +1,5 @@
 import type { Cmcd } from '../cmcd/Cmcd.js';
+import { ResponseType } from './ResponseType.js'
 
 /**
  * Common request API.
@@ -22,7 +23,7 @@ export type CommonMediaRequest = {
 	/**
 	 * The response type with which the response from the server shall be compatible.
 	 */
-	responseType?: string
+	responseType: ResponseType
 
 	/**
 	 * The headers object associated with the request.
