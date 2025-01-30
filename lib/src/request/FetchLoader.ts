@@ -38,16 +38,23 @@ export interface FetchLoaderListener {
  */
 export class FetchLoader {
 
-  private cmRequest: CommonMediaRequest;
-  private cmResponse: CommonMediaResponse;
   private options: FetchLoaderOptions = DEFAULT_REQUEST_LOADER_OPTIONS;
+  private cmRequest: CommonMediaRequest | null = null;
+  private cmResponse: CommonMediaResponse | null = null;
   private abortController: AbortController | null = null;
   private timeoutID: number = NaN
   private listeners: FetchLoaderListener[] = [];
   
-  constructor(request: CommonMediaRequest, options: FetchLoaderOptions = DEFAULT_REQUEST_LOADER_OPTIONS) {
-    this.cmRequest = request;
+  constructor(options: FetchLoaderOptions = DEFAULT_REQUEST_LOADER_OPTIONS) {
     this.options = options;
+  }
+
+  public addListener(listener: FetchLoaderListener) {
+    this.listeners.push(listener);
+  }
+
+  public async load(request: CommonMediaRequest): Promise<CommonMediaResponse> {
+    this.cmRequest = request;
 
     this.cmResponse = {
       request: this.cmRequest,
@@ -57,13 +64,6 @@ export class FetchLoader {
       },
       status: 0
     };
-  }
-
-  public addListener(listener: FetchLoaderListener) {
-    this.listeners.push(listener);
-  }
-
-  public async executeRequest(): Promise<CommonMediaResponse> {
 
     // Abort controller to enable request aborting
     this.abortController = new AbortController();
@@ -96,7 +96,7 @@ export class FetchLoader {
       const response = await fetch(this.cmRequest.url, options);
 
       // Response headers received
-      this.listeners.forEach(listener => listener.onheaders && listener.onheaders(this.cmResponse));
+      this.listeners.forEach(listener => listener.onheaders && listener.onheaders(this.cmResponse!!));
 
       this.cmResponse.resourceTiming.responseStart = this.timestamp();
 
@@ -132,9 +132,17 @@ export class FetchLoader {
     return this.cmResponse;
   }
 
-  public abortRequest() {
+  public abort() {
+    if (!this.cmResponse) {
+      return;
+    }
     this.cmResponse.abortReason = FetchAbortedReason.USER;
     this.abortController?.abort();
+  }
+
+  public reset() {
+    this.cmRequest = null;
+    this.cmResponse = null;
   }
 
   private setTimeout(timeout: number | undefined) {
@@ -142,7 +150,9 @@ export class FetchLoader {
       return;
     }
     this.timeoutID = window.setTimeout(() => {
-      this.cmResponse.abortReason = FetchAbortedReason.TIMEOUT;
+      if (this.cmResponse) {
+        this.cmResponse.abortReason = FetchAbortedReason.TIMEOUT;
+      }
       this.abortController?.abort()
     }, timeout)
   }
@@ -156,10 +166,16 @@ export class FetchLoader {
   }
 
   private onAbort(/*e: any*/) {
+    if (!this.cmResponse) {
+      return;
+    }
     this.cmResponse.aborted = true;
   }
 
   private async getResponseData(response: Response): Promise<any> {
+    if (!this.cmRequest) {
+      return null;
+    }
     let data: any = null;
     switch (this.cmRequest.responseType) {
       case ResponseType.TEXT:
@@ -179,7 +195,7 @@ export class FetchLoader {
 
   private async readBody(response: Response): Promise<ArrayBufferLike | null> {
     const body = response.body;
-    if (body === null) {
+    if (body === null || !this.cmResponse) {
       return null
     }
 
@@ -210,7 +226,7 @@ export class FetchLoader {
           data: value,
         }
 
-        this.listeners.forEach(listener => listener.onprogress && listener.onprogress(this.cmResponse, fetchProgress));
+        this.listeners.forEach(listener => listener.onprogress && listener.onprogress(this.cmResponse!!, fetchProgress));
       }
     }
     return data.buffer;
@@ -222,7 +238,9 @@ export class FetchLoader {
    * @internal
    */
   private addResourceTimingValues() {
-
+    if (!this.cmRequest || !this.cmResponse) {
+      return;
+    }
     if (!this.options.useResourceTimingApi) {
       return;
     }
@@ -300,6 +318,6 @@ export class FetchLoader {
     _data.set(newData, data.length);
 
     return _data;
-}
+  }
 
 };
