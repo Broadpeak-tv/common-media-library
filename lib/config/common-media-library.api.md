@@ -294,7 +294,7 @@ export type CmValue = CmObjectType | CmStreamingFormat | CmStreamType | string |
 export type CommonMediaRequest = {
     url: string;
     method: string;
-    responseType?: string;
+    responseType: ResponseType_2;
     headers?: Record<string, string>;
     credentials?: RequestCredentials;
     mode?: RequestMode;
@@ -308,9 +308,10 @@ export type CommonMediaResponse = {
     request: CommonMediaRequest;
     url?: string;
     redirected?: boolean;
+    aborted?: boolean;
+    abortReason?: FetchAbortedReason;
     status?: number;
     statusText?: string;
-    type?: string;
     headers?: Record<string, string>;
     data?: any;
     resourceTiming: ResourceTiming;
@@ -453,6 +454,41 @@ export function encodeSfList(value: SfMember[], options?: SfEncodeOptions): stri
 export function extractCta608Data(raw: DataView, cta608Range: Array<number>): Array<Array<number>>;
 
 // @beta
+export const FETCH_ABORTED_TIMEOUT = "timeout";
+
+// @beta
+export const FETCH_ABORTED_USER = "user";
+
+// @beta
+export const FetchAbortedReason: {
+    readonly USER: typeof FETCH_ABORTED_USER;
+    readonly TIMEOUT: typeof FETCH_ABORTED_TIMEOUT;
+};
+
+// @beta (undocumented)
+export type FetchAbortedReason = ValueOf<typeof FetchAbortedReason>;
+
+// @beta
+export class FetchLoader {
+    constructor(options?: FetchLoaderOptions);
+    // (undocumented)
+    abort(): void;
+    // Warning: (ae-forgotten-export) The symbol "FetchLoaderListener" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    addListener(listener: FetchLoaderListener): void;
+    // (undocumented)
+    load(request: CommonMediaRequest): Promise<CommonMediaResponse>;
+    // (undocumented)
+    reset(): void;
+}
+
+// @beta
+export type FetchLoaderOptions = {
+    useResourceTimingApi?: boolean;
+};
+
+// @beta
 export function findCta608Nalus(raw: DataView, startPos: number, size: number): Array<Array<number>>;
 
 // @alpha
@@ -590,6 +626,17 @@ export type ResourceTiming = {
 
 // @beta
 export type ResponseInterceptor = (response: CommonMediaResponse) => Promise<CommonMediaResponse>;
+
+// @beta
+const ResponseType_2: {
+    readonly ARRAYBUFFER: typeof RESPONSE_TYPE_ARRAYBUFFER;
+    readonly JSON: typeof RESPONSE_TYPE_JSON;
+    readonly TEXT: typeof RESPONSE_TYPE_TEXT;
+};
+
+// @beta (undocumented)
+type ResponseType_2 = ValueOf<typeof ResponseType_2>;
+export { ResponseType_2 as ResponseType }
 
 // @beta
 export function roundToEven(value: number, precision: number): number;
@@ -852,5 +899,8 @@ export type VideoTrack = Track & {
 // src/cmaf/ham/types/mapper/hls/HlsManifest.ts:12:2 - (ae-forgotten-export) The symbol "PlayList" needs to be exported by the entry point index.d.ts
 // src/cmaf/ham/types/mapper/hls/HlsManifest.ts:13:2 - (ae-forgotten-export) The symbol "MediaGroups" needs to be exported by the entry point index.d.ts
 // src/cmaf/ham/types/mapper/hls/HlsManifest.ts:14:2 - (ae-forgotten-export) The symbol "SegmentHls" needs to be exported by the entry point index.d.ts
+// src/request/ResponseType.ts:20:3 - (ae-forgotten-export) The symbol "RESPONSE_TYPE_ARRAYBUFFER" needs to be exported by the entry point index.d.ts
+// src/request/ResponseType.ts:25:3 - (ae-forgotten-export) The symbol "RESPONSE_TYPE_JSON" needs to be exported by the entry point index.d.ts
+// src/request/ResponseType.ts:30:3 - (ae-forgotten-export) The symbol "RESPONSE_TYPE_TEXT" needs to be exported by the entry point index.d.ts
 
 ```
