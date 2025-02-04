@@ -95,9 +95,6 @@ export class FetchLoader {
 
       const response = await fetch(this.cmRequest.url, options);
 
-      // Response headers received
-      this.listeners.forEach(listener => listener.onheaders && listener.onheaders(this.cmResponse!!));
-
       this.cmResponse.resourceTiming.responseStart = this.timestamp();
 
       this.cancelTimeout();
@@ -115,6 +112,9 @@ export class FetchLoader {
         responseHeaders[key] = response.headers.get(key)!!;
       }
       this.cmResponse.headers = responseHeaders;
+
+      // Response headers received
+      this.listeners.forEach(listener => listener.onheaders && listener.onheaders(this.cmResponse!!));
 
       // Response data
       this.cmResponse.data = await this.getResponseData(response);
